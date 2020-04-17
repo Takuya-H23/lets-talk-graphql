@@ -1,6 +1,6 @@
 const Query = {
-  threads(parent, args, { db }) {
-    return db.threads
+  posts(parent, args, { db }) {
+    return db.posts
   },
 
   comments(parent, args, { db }) {
