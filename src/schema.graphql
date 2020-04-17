@@ -34,10 +34,7 @@ type Mutation {
 
 input CreatePostInput {
   text: String!
-<<<<<<< HEAD
   name: String!
-=======
->>>>>>> 6d3af732436f3bb52f69f9994dc3c5c850477541
 }
 
 input UpdatePostInput {
