@@ -2,11 +2,19 @@ import checkStringLength from './../utils/checkStringLength'
 
 const Mutation = {
   createPost(parent, { key, input }, { db }) {
+<<<<<<< HEAD
     checkStringLength(key, input.text, input.name)
 
     const newPost = {
       key,
       ...input,
+=======
+    checkStringLength(key, input.text)
+
+    const newPost = {
+      key,
+      text: input.text,
+>>>>>>> 6d3af732436f3bb52f69f9994dc3c5c850477541
       id: 'post4',
       createdAt: new Date(),
       updatedAt: null,
@@ -50,7 +58,11 @@ const Mutation = {
     const post = db.posts.findIndex((post) => post.id === input.postId)
     if (post === -1) throw new Error('Post not found')
 
+<<<<<<< HEAD
     checkStringLength(key, input.text, input.name)
+=======
+    checkStringLength(key, input.text)
+>>>>>>> 6d3af732436f3bb52f69f9994dc3c5c850477541
 
     const newComment = {
       ...input,
