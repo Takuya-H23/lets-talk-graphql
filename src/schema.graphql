@@ -1,7 +1,7 @@
-type Thread {
+type Post {
   id: ID!
   key: String!
-  title: String!
+  text: String!
   comments: [Comment!]!
   createdAt: String!
   updatedAt: String
@@ -11,12 +11,31 @@ type Comment {
   id: ID!
   key: String!
   text: String!
-  threadId: ID!
+  postId: ID!
   createdAt: String!
   updatedAt: String
 }
 
 type Query {
-  threads: [Thread!]!
+  posts: [Post!]!
   comments: [Comment!]!
+}
+
+type Mutation {
+  createPost(key: String!, input: CreatePostInput!): Post!
+  updatePost(key: String!, input: UpdatePostInput): Post!
+  deletePost(key: String!, input: DeletePostInput): Post!
+}
+
+input CreatePostInput {
+  text: String!
+}
+
+input UpdatePostInput {
+  id: ID!
+  text: String!
+}
+
+input DeletePostInput {
+  id: ID!
 }
