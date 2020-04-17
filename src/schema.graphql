@@ -1,0 +1,22 @@
+type Thread {
+  id: ID!
+  key: String!
+  title: String!
+  comments: [Comment!]!
+  createdAt: String!
+  updatedAt: String
+}
+
+type Comment {
+  id: ID!
+  key: String!
+  text: String!
+  threadId: ID!
+  createdAt: String!
+  updatedAt: String
+}
+
+type Query {
+  threads: [Thread!]!
+  comments: [Comment!]!
+}
