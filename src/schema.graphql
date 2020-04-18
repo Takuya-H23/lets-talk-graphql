@@ -27,6 +27,9 @@ type Mutation {
   createPost(key: String!, input: CreatePostInput): Post!
   updatePost(key: String!, input: UpdatePostInput): Post!
   deletePost(key: String!, input: DeletePostInput): Post!
+  createComment(key: String!, input: CreateCommentInput): Comment!
+  updateComment(key: String!, input: UpdateCommentInput): Comment!
+  deleteComment(key: String!, input: DeleteCommentInput): Comment!
 }
 
 input CreatePostInput {
@@ -40,5 +43,20 @@ input UpdatePostInput {
 }
 
 input DeletePostInput {
+  id: ID!
+}
+
+input CreateCommentInput {
+  postId: ID!
+  text: String!
+  name: String!
+}
+
+input UpdateCommentInput {
+  id: ID!
+  text: String!
+}
+
+input DeleteCommentInput {
   id: ID!
 }

@@ -43,6 +43,49 @@ const Mutation = {
 
     return db.posts.splice(postIndex, 1)[0]
   },
+
+  // Comment Mutation==================================================
+  createComment(parent, { key, input }, { db }) {
+    validateStringLength(key, input.name, input.text)
+
+    const post = db.posts.find((post) => post.id === input.postId)
+    if (!post) throw new Error('Post not found')
+
+    const newComment = {
+      id: 'comment4',
+      key,
+      ...input,
+      createdAt: new Date(),
+      updatedAt: null,
+    }
+
+    db.comments.push(newComment)
+
+    return newComment
+  },
+
+  updateComment(parent, { key, input }, { db }) {
+    validateStringLength(key, input.text)
+
+    const comment = db.comments.find(
+      (comment) => comment.id === input.id && comment.key === key
+    )
+    if (!comment) throw new Error('Not found')
+
+    comment.text = input.text
+    comment.updatedAt = new Date()
+
+    return comment
+  },
+
+  deleteComment(parent, { key, input }, { db }) {
+    const commentIndex = db.comments.findIndex(
+      (comment) => comment.id === input.id && comment.key === key
+    )
+    if (commentIndex === -1) throw new Error('Comment not found')
+
+    return db.comments.splice(commentIndex, 1)[0]
+  },
 }
 
 export default Mutation
