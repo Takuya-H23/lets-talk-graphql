@@ -1,10 +1,10 @@
 const Query = {
-  posts(parent, args, { db }) {
-    return db.posts
+  posts(parent, args, { prisma }, info) {
+    return prisma.query.posts(null, info)
   },
 
-  comments(parent, args, { db }) {
-    return db.comments
+  comments(parent, args, { prisma }, info) {
+    return prisma.query.comments(null, info)
   },
 }
 
