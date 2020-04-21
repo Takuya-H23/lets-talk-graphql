@@ -1,6 +1,5 @@
 type Post {
   id: ID!
-  key: String!
   text: String!
   name: String!
   comments: [Comment!]!
@@ -10,7 +9,6 @@ type Post {
 
 type Comment {
   id: ID!
-  key: String!
   text: String!
   name: String!
   post: Post!
