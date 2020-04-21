@@ -5,19 +5,22 @@
   "author": "Takuya Hirata",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon -e js,graphql --exec babel-node src/index.js",
+    "start": "env-cmd -f ./config/prod.env node dist/index.js",
+    "heroku-postbuild": "babel src --out-dir dist --copy-files",
+    "dev": "env-cmd -f ./config/dev.env nodemon -e js,graphql --exec babel-node src/index.js",
     "get-schema": "graphql get-schema -p prisma"
   },
   "dependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.5",
+    "env-cmd": "^10.1.0",
     "graphql-cli": "^3.0.14",
     "graphql-yoga": "^1.18.3",
     "prisma-binding": "^2.3.16"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.0",
-    "@babel/node": "^7.8.7",
-    "@babel/preset-env": "^7.9.5",
     "nodemon": "^2.0.3"
   }
 }

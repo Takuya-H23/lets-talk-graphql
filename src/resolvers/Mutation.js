@@ -1,90 +1,73 @@
 import validateStringLength from '../utils/validateStringLength.js'
 import checkName from '../utils/checkName'
+import prismaExists from '../utils/prismaExists'
+import { TABLES } from '../utils/constant'
 
 const Mutation = {
-  createPost(parent, { key, input }, { db }) {
-    validateStringLength(key)
+  createPost(parent, { key, input }, { prisma }, info) {
+    validateStringLength(key, input.text)
+
     const newPost = {
-      id: 'post4',
       key,
       name: checkName(input.name),
       text: input.text,
-      createdAt: new Date(),
-      updatedAt: null,
     }
 
-    db.posts.push(newPost)
-    return newPost
+    return prisma.mutation.createPost({ data: newPost }, info)
   },
 
-  updatePost(parent, { key, input }, { db }) {
+  async updatePost(parent, { key, input }, { prisma }, info) {
     validateStringLength(key, input.text)
+    await prismaExists({ id: input.id, key }, TABLES.POST)
 
-    const post = db.posts.find(
-      (post) => post.id === input.id && post.key === key
+    return prisma.mutation.updatePost(
+      { data: { text: input.text }, where: { id: input.id } },
+      info
     )
-    if (!post) throw new Error('Post not found')
-
-    post.text = input.text
-    post.updatedAt = new Date()
-
-    return post
   },
 
-  deletePost(parent, { key, input }, { db }) {
+  async deletePost(parent, { key, input }, { prisma }, info) {
     validateStringLength(key)
+    await prismaExists({ id: input.id, key }, TABLES.POST)
 
-    const postIndex = db.posts.findIndex(
-      (post) => post.id === input.id && post.key === key
-    )
-    if (postIndex === -1) throw new Error('Post not found')
-
-    db.comments = db.comments.filter((comment) => comment.postId !== input.id)
-
-    return db.posts.splice(postIndex, 1)[0]
+    return prisma.mutation.deletePost({ where: { id: input.id } }, info)
   },
 
   // Comment Mutation==================================================
-  createComment(parent, { key, input }, { db }) {
+  async createComment(parent, { key, input }, { prisma }, info) {
     validateStringLength(key, input.name, input.text)
+    await prismaExists({ id: input.postId }, TABLES.POST)
 
-    const post = db.posts.find((post) => post.id === input.postId)
-    if (!post) throw new Error('Post not found')
-
-    const newComment = {
-      id: 'comment4',
-      key,
-      ...input,
-      createdAt: new Date(),
-      updatedAt: null,
-    }
-
-    db.comments.push(newComment)
-
-    return newComment
+    return prisma.mutation.createComment(
+      {
+        data: {
+          key,
+          text: input.text,
+          name: input.name,
+          post: { connect: { id: input.postId } },
+        },
+      },
+      info
+    )
   },
 
-  updateComment(parent, { key, input }, { db }) {
+  async updateComment(parent, { key, input }, { prisma }, info) {
     validateStringLength(key, input.text)
+    await prismaExists({ id: input.id, key }, TABLES.COMMENT)
 
-    const comment = db.comments.find(
-      (comment) => comment.id === input.id && comment.key === key
+    return prisma.mutation.updateComment(
+      {
+        data: { key, text: input.text },
+        where: { id: input.id },
+      },
+      info
     )
-    if (!comment) throw new Error('Not found')
-
-    comment.text = input.text
-    comment.updatedAt = new Date()
-
-    return comment
   },
 
-  deleteComment(parent, { key, input }, { db }) {
-    const commentIndex = db.comments.findIndex(
-      (comment) => comment.id === input.id && comment.key === key
-    )
-    if (commentIndex === -1) throw new Error('Comment not found')
+  async deleteComment(parent, { key, input }, { prisma }, info) {
+    await prismaExists({ id: input.id, key }, TABLES.COMMENT)
 
-    return db.comments.splice(commentIndex, 1)[0]
+    return prisma.mutation.deleteComment({ where: { id: input.id } }, info)
   },
 }
 
