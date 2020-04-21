@@ -1,9 +1,19 @@
-type User {
-  id: ID! @id
-  name: String!
-}
-
 type Post {
   id: ID! @id
+  key: String!
+  text: String!
   name: String!
+  comments: [Comment!]! @relation(name: "PostToComment", onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Comment {
+  id: ID! @id
+  key: String!
+  text: String!
+  name: String!
+  post: Post! @relation(name: "PostToComment", onDelete: SET_NULL)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
