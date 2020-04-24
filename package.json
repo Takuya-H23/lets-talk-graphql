@@ -20,6 +20,8 @@
     "@babel/core": "^7.9.0",
     "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.9.5",
+    "apollo-boost": "^0.4.7",
+    "cross-fetch": "^3.0.4",
     "env-cmd": "^10.1.0",
     "graphql-cli": "^3.0.14",
     "graphql-yoga": "^1.18.3",
