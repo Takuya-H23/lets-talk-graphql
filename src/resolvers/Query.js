@@ -1,6 +1,24 @@
 const Query = {
-  posts(parent, args, { prisma }, info) {
-    return prisma.query.posts(null, info)
+  posts(parent, { textOrName }, { prisma }, info) {
+    return prisma.query.posts(
+      {
+        where: {
+          OR: [
+            { text_contains: textOrName || '' },
+            { name_contains: textOrName || '' },
+            {
+              comments_some: {
+                OR: [
+                  { text_contains: textOrName || '' },
+                  { name_contains: textOrName || '' },
+                ],
+              },
+            },
+          ],
+        },
+      },
+      info
+    )
   },
 
   comments(parent, args, { prisma }, info) {
