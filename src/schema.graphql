@@ -17,7 +17,7 @@ type Comment {
 }
 
 type Query {
-  posts: [Post!]!
+  posts(textOrName: String): [Post!]!
   comments: [Comment!]!
 }
 

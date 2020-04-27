@@ -10,23 +10,23 @@ const client = new ApolloBoost({
 
 beforeEach(seedDatabase)
 
-test('Should return a post', async () => {
-  const posts = gql`
-    query {
-      posts {
+const queryPosts = gql`
+  query($input: String) {
+    posts(textOrName: $input) {
+      id
+      name
+      text
+      comments {
         id
-        name
         text
-        comments {
-          id
-          text
-          name
-        }
+        name
       }
     }
-  `
+  }
+`
 
-  const { data } = await client.query({ query: posts })
+test('Should return a post', async () => {
+  const { data } = await client.query({ query: queryPosts })
 
   expect(data.posts[0].id).toBe(postOne.post.id)
   expect(data.posts[0].comments[0].id).toBe(commentOne.comment.id)
@@ -46,12 +46,23 @@ test('Should create a post', async () => {
     }
   `
   const res = await client.mutate({ mutation: createPost })
+
   const postExists = await prisma.exists.Post({
     id: res.data.createPost.id,
     key: 'test',
   })
 
   expect(postExists).toBe(true)
+})
+
+test('Should not return any posts', async () => {
+  const variables = {
+    input: 'asdfasdfasdf',
+  }
+
+  const { data } = await client.query({ query: queryPosts, variables })
+
+  expect(data.posts.length).toBe(0)
 })
 
 test('Should update a post', async () => {
