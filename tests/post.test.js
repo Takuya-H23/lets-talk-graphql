@@ -1,8 +1,8 @@
 /*eslint-disable */
 import 'cross-fetch/polyfill'
 import ApolloBoost, { gql } from 'apollo-boost'
-import prisma from '../../src/prisma'
-import seedDatabase, { postOne, commentOne } from './utils/seedDatabase'
+import prisma from '../src/prisma'
+import seedDatabase, { postOne, commentOne } from './jest/utils/seedDatabase'
 
 const client = new ApolloBoost({
   uri: 'http://localhost:4000',
@@ -62,13 +62,11 @@ test('Should update a post', async () => {
         input: { id: "${postOne.post.id}", text: "${'Updated post'}" }
       ) {
         id
-        name
-        text
       }
     }
   `
 
-  const res = await client.mutate({ mutation: updatePost })
+  await client.mutate({ mutation: updatePost })
 
   const postExists = await prisma.exists.Post({
     id: postOne.post.id,
