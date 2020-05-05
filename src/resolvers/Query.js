@@ -1,3 +1,4 @@
+import '@babel/polyfill'
 import PrismaExists from '../utils/prismaExists'
 import { TABLES } from '../utils/constant'
 

@@ -1,3 +1,4 @@
+import '@babel/polyfill'
 import validateStringLength from '../utils/validateStringLength.js'
 import checkName from '../utils/checkName'
 import prismaExists from '../utils/prismaExists'
