@@ -25,6 +25,21 @@ const queryPosts = gql`
   }
 `
 
+const queryAPost = gql`
+  query($id: ID!) {
+    post(id: $id) {
+      id
+      name
+      text
+      comments {
+        id
+        text
+        name
+      }
+    }
+  }
+`
+
 test('Should return a post', async () => {
   const { data } = await client.query({ query: queryPosts })
 
@@ -53,6 +68,16 @@ test('Should create a post', async () => {
   })
 
   expect(postExists).toBe(true)
+})
+
+test('Should return a specific post', async () => {
+  const variables = {
+    id: postOne.post.id,
+  }
+
+  const { data } = await client.query({ query: queryAPost, variables })
+
+  expect(data.post.id).toBe(postOne.post.id)
 })
 
 test('Should not return any posts', async () => {

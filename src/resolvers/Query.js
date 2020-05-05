@@ -1,3 +1,6 @@
+import PrismaExists from '../utils/prismaExists'
+import { TABLES } from '../utils/constant'
+
 const Query = {
   posts(parent, { textOrName }, { prisma }, info) {
     return prisma.query.posts(
@@ -19,6 +22,12 @@ const Query = {
       },
       info
     )
+  },
+
+  async post(parent, { id }, { prisma }, info) {
+    await PrismaExists({ id }, TABLES.POST)
+
+    return prisma.query.post({ where: { id } }, info)
   },
 
   comments(parent, args, { prisma }, info) {
